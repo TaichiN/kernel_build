@@ -39,11 +39,6 @@ fi
 cp $KERNEL_OUT/arch/arm/boot/zImage $TARGET_DIR
 [ $? -ne 0 ] && echo "Error: failed to copy zImage." && exit 1
 
-cp -r $BUILD_ROOT_DIR/$DEVICE/ramdisk $TARGET_DIR/ramdisk
-[ $? -ne 0 ] && echo "Error: failed to copy ramdisk." && exit 1
-
-cd $TARGET_DIR
-
 echo "Building ramdisk..."
 if [ ! -f ${BUILD_ROOT_DIR}/${DEVICE}/make-ramdisk.sh ]; then
   echo "Error: ${DEVICE}/make-ramdisk.sh not found"
@@ -69,6 +64,8 @@ export zipdir=package
 export zipfile="$TARGET_DIR/kernel_${DEVICE}${LOCALVERSION}.zip"
 
 cp -r boot.img $zipdir
+[ $? -ne 0 ] && exit 1
+
 cd $zipdir
 zip -r $zipfile *
 [ $? -ne 0 ] && echo "Error: failed to build zip file." && exit 1
